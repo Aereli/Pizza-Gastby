@@ -11,6 +11,7 @@ export default {
     description: `Awesome Example site template using Gatsby JS!` 
   },
   plugins: [
+    `gatsby-plugin-react-helmet`,
     `gatsby-plugin-styled-components`,
     {
       resolve: `gatsby-source-sanity`,

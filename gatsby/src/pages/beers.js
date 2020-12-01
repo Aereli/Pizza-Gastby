@@ -1,11 +1,13 @@
 import { graphql } from 'gatsby'
 import React from 'react'
 import styled from 'styled-components'
+import SEO from '../components/SEO'
 
 const BeerPage = ({ data} ) => {
   const beers = data.beers.nodes
   return (
     <>
+      <SEO title="Beers!" />
       <h2 className="cernter">{`We have ${beers.length} beers available!`}</h2>
       <BeerGridStyles>  
       {beers.map(beer => {

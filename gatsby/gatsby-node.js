@@ -2,7 +2,6 @@ import path from 'path'
 import fetch from 'isomorphic-fetch'
 
 async function turnPizzasIntoPages({ graphql, actions}) {
-const { createPage } = actions
 const pizzaTemplate = path.resolve('./src/templates/pizza-template.js') 
 const { data } = await graphql(`
   query {
@@ -17,7 +16,7 @@ const { data } = await graphql(`
   }
 `)
   data.pizzas.nodes.forEach((pizza) => {   
-      createPage({
+      actions.createPage({
         path: `pizza/${pizza.slug.current}`,
         component: pizzaTemplate,
         context: {
@@ -28,9 +27,7 @@ const { data } = await graphql(`
 }
 
 async function turnToppingsIntoPages({ graphql, actions}) {
-  const { createPage } = actions
   const toppingTemplate = path.resolve('./src/pages/pizzas.js') 
-
   const { data } = await graphql(`
     query { 
       toppings: allSanityTopping {
@@ -42,7 +39,7 @@ async function turnToppingsIntoPages({ graphql, actions}) {
     }
   `)
   data.toppings.nodes.forEach(topping => {
-    createPage({
+    actions.createPage({
       path: `/topping/${topping.name}`,
       component: toppingTemplate,
       context: {
@@ -53,20 +50,48 @@ async function turnToppingsIntoPages({ graphql, actions}) {
   })
 }
 
-// async function turnSliceMastersIntoPages({ grapqhl , actions})
-  
-// const sliceMasterTemplate = path.resolve('.src/templates/slice-master-template.js')
-// const { data } = await graphql(`
-//   query { 
-//     toppings: allSanityTopping {
-//       nodes { 
-//         name
-//         id
-//       }
-//     }
-//   }
-// `)
+async function turnSliceMastersIntoPages({ graphql, actions}) {
+  const { data } = await graphql(`
+    query {
+      slicemasters: allSanityPerson {
+        totalCount
+        nodes {
+          name
+          id
+          slug {
+            current
+          }
+        }
+      }
+    }
+  `)
+//single person template
+data.slicemasters.nodes.forEach(person => {
+  actions.createPage({
+    path: `/slicemaster/${person.slug.current}`,
+    component: path.resolve('./src/templates/person-template.js'),
+    context: {
+      name: person.name,
+      slug: person.slug.current
+    }
+  })
+})
 
+//Pagination  
+const pageSize = parseInt(process.env.GATSBY_PAGE_SIZE)
+const pageCount = Math.ceil(data.slicemasters.totalCount / pageSize)
+  Array.from({length: pageCount}).forEach((_, i) => {
+    actions.createPage({
+      path: `/slicemasters/${i + 1}`,
+      component: path.resolve('./src/pages/slicemasters.js'),
+      context: {
+        skip: i * pageSize,
+        currentPage: i + 1,
+        pageSize: pageSize
+      }
+    })
+  })
+}
 
 async function fetchBeersAndTurnIntoNodes({ actions, createNodeId, createContentDigest}){
   const res = await fetch('https://sampleapis.com/beers/api/ale')
@@ -92,11 +117,11 @@ export async function sourceNodes(params) {
   await Promise.all([fetchBeersAndTurnIntoNodes(params)])
 }
 
-
 export async function createPages(params) {
   // runs all promises concurrently
   await Promise.all([
     turnPizzasIntoPages(params),
-    turnToppingsIntoPages(params)
+    turnToppingsIntoPages(params),
+    turnSliceMastersIntoPages(params)
   ]) 
 }
