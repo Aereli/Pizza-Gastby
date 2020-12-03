@@ -13,17 +13,21 @@ import calculateOrderTotal from '../../utils/calculateOrderTotal'
 
 const OrderPage = ({ data }) => {
   const pizzas = data.pizzas.nodes
-  const { order, addToOrder, removeFromOrder } = usePizza({ pizzas, inputs: values})
   const { values, updateValue } = useForm({
     name: '',
     email: '',
+    shoe: '',
   })
+  const { order, addToOrder, removeFromOrder, error, loading, message, submitOrder } = usePizza({ pizzas, values })
 
+  if(message) {
+    return <p>{message}</p>
+  }
   return (
     <>
     <SEO title="order a pizza" />
-      <OrderStyles >
-        <fieldset>
+      <OrderStyles onSubmit={submitOrder}>
+        <fieldset disabled={loading}>
           <legend>Your Info</legend>
           <label htmlFor="name">
             Name
@@ -33,11 +37,13 @@ const OrderPage = ({ data }) => {
           <label htmlFor="email">
             Email
             <input id="email" type="text" name="email" value={values.email} onChange={updateValue} /> 
+            {/* this is our "honeypot" to defer bots from using the form!! */}
+            <input className="shoe" id="shoe" type="shoe" name="shoe" value={values.shoe} onChange={updateValue} /> 
           </label>
         </fieldset>
         
         {/* menu section */}
-        <fieldset className="menu">
+        <fieldset className="menu" disabled={loading}>
           <legend>Menu</legend>
           {pizzas.map((pizza) => (
             <MenuItemStyles key={pizza.id}>
@@ -47,7 +53,7 @@ const OrderPage = ({ data }) => {
               </div>
               <div>
                 {['S', 'M', 'L'].map(size => (
-                  <button 
+                  <button  
                     key={size}
                     type="button" 
                     onClick={() => addToOrder(
@@ -64,7 +70,7 @@ const OrderPage = ({ data }) => {
         </fieldset>
 
         {/* order Section */}
-        <fieldset className="order">
+        <fieldset className="order" disabled={loading}>
           <legend>Order</legend>
           <PizzaOrder 
           order={order}
@@ -74,9 +80,14 @@ const OrderPage = ({ data }) => {
         </fieldset>
 
         {/* total section */}
-        <fieldset>
+        <fieldset disabled={loading}>
           <h3>Your total is {formatMoney(calculateOrderTotal(order, pizzas))}</h3>
-          <button type="submit">Order now</button>
+          <div>
+            {error ? <p>Error: {error}</p> : ""}
+          </div>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Loading Order...' : 'Order Now'}
+          </button>
         </fieldset>
       </OrderStyles>
     </>
