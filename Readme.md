@@ -4,4 +4,4 @@
 
 [Sanity doc for rebuilding](https://www.sanity.io/blog/how-to-quickly-set-up-a-gatsby-js-jamstack-website-with-a-headless-cms#trigger-new-netlify-builds-on-content-changes-52f5edfa3342)
 
-![light-house])(https://github.com/aereli/Pizza-Gastby/gatsby/src/assets/images/lighthouse.png)
+![light-house](lighthouse.png)
