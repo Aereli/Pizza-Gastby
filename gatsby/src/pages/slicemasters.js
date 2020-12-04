@@ -6,32 +6,32 @@ import Pagination from '../components/Pagination'
 import SEO from '../components/SEO'
 
 const SlicemastersPage = ({ data, pageContext }) => {
-  const sliceMaster = data.slicemasters.nodes
+  const slicemasters = data.slicemasters.nodes;
   return (
     <>
-    <SEO title={`Slice Masters - Page ${pageContext.currentPage || 1 }`} />
-      <Pagination 
-        pageSize={parseInt(process.env.GATSBY_PAGE_SIZE)} 
-        totalCount={data.slicemasters.totalCount} 
-        currentPage={pageContext.currentPage || 1} 
-        skip={pageContext.skip} 
-        base="/slicemasters" 
+      <SEO title={`Slicemasters - Page ${pageContext.currentPage || 1}`} />
+      <Pagination
+        pageSize={parseInt(process.env.GATSBY_PAGE_SIZE)}
+        totalCount={data.slicemasters.totalCount}
+        currentPage={pageContext.currentPage || 1}
+        skip={pageContext.skip}
+        base="/slicemasters"
       />
-      <SliceMasterGrid>
-        {sliceMaster.map(person => (
-          <SliceMasterStyles>
+      <SlicemasterGrid>
+        {slicemasters.map((person) => (
+          <SlicemasterStyles key={person.id}>
             <Link to={`/slicemaster/${person.slug.current}`}>
               <h2>
-                <span className="mark">{person.name}</span>                
+                <span className="mark">{person.name}</span>
               </h2>
             </Link>
             <Img fluid={person.image.asset.fluid} />
             <p className="description">{person.description}</p>
-          </SliceMasterStyles>
+          </SlicemasterStyles>
         ))}
-      </SliceMasterGrid>
+      </SlicemasterGrid>
     </>
-  )
+  );
 }
 
 export default SlicemastersPage
@@ -59,13 +59,13 @@ export const query = graphql`
   }
 `
 
-const SliceMasterGrid = styled.div`
+const SlicemasterGrid = styled.div`
   display: grid;
   grid-gap: 2rem;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 `
 
-const SliceMasterStyles = styled.div`
+const SlicemasterStyles = styled.div`
   a { 
     text-decoration: none
   }

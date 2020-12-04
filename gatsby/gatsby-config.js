@@ -1,21 +1,22 @@
-// common JS modules use "module.exports = {}" 
-// we are using ES Modules instead unlike the gastby docs . 
+import dotenv from 'dotenv';
 
-import dotenv from 'dotenv' 
-dotenv.config({ path: '.env' })
+dotenv.config({ path: '.env' });
 
 export default {
+  pathPrefix: '/pizza',
   siteMetadata: {
-    title: `Slick Slices`,
-    siteUrl: `https://www.gatsbyjs.com`,
-    description: `Awesome Example site template using Gatsby JS!` 
+    title: `Slicks Slices`,
+    siteUrl: 'https://gatsby.pizza',
+    description: 'The best pizza place in Hamilton!',
+    twitter: '@slicksSlices',
   },
   plugins: [
-    `gatsby-plugin-react-helmet`,
-    `gatsby-plugin-styled-components`,
+    'gatsby-plugin-react-helmet',
+    'gatsby-plugin-styled-components',
     {
-      resolve: `gatsby-source-sanity`,
-      options: { 
+      // this is the name of the plugin you are adding
+      resolve: 'gatsby-source-sanity',
+      options: {
         projectId: `7nxqd9br`,
         dataset: `production`,
         watchMode: true,
@@ -23,4 +24,4 @@ export default {
       },
     },
   ],
-}
+};
