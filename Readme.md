@@ -1,4 +1,4 @@
-## [Gatsby Pizza](https://agitated-poitras-af86ae.netlify.app/order/)
+## [Gatsby Pizza](https://agitated-poitras-af86ae.netlify.app/)
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/287021b4-0489-4165-aac7-9a0eb4655a24/deploy-status)](https://app.netlify.com/sites/agitated-poitras-af86ae/deploys)
 
