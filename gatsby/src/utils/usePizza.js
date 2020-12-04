@@ -1,32 +1,28 @@
-import { useState, useContext } from 'react';
-import OrderContext from '../components/OrderContext';
-import calculateOrderTotal from './calculateOrderTotal';
-import formatMoney from './formatMoney';
-import attachNamesAndPrices from './attachNamesAndPrices';
+import { useState, useContext } from 'react'
+import OrderContext from '../components/OrderContext'
+import calculateOrderTotal from './calculateOrderTotal'
+import formatMoney from './formatMoney'
+import attachNamesAndPrices from './attachNamesAndPrices'
 
 export default function usePizza({ pizzas, values }) {
-  const [order, setOrder] = useContext(OrderContext);
-  const [error, setError] = useState();
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [order, setOrder] = useContext(OrderContext)
+  const [error, setError] = useState()
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState('')
 
   function addToOrder(orderedPizza) {
-    setOrder([...order, orderedPizza]);
+    setOrder([...order, orderedPizza])
   }
 
-  console.log(pizzas, values)
   function removeFromOrder(index) {
-    setOrder([
-      ...order.slice(0, index),
-      ...order.slice(index + 1),
-    ]);
+    setOrder([...order.slice(0, index), ...order.slice(index + 1)])
   }
 
   // this is the function that is run when someone submits the form
   async function submitOrder(e) {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
     // setMessage('Pizza being sent...');
 
     // gather all the data
@@ -36,7 +32,7 @@ export default function usePizza({ pizzas, values }) {
       name: values.name,
       email: values.email,
       shoe: values.shoe,
-    };
+    }
     // Send this data the a serevrless function when they check out
     const res = await fetch(
       `${process.env.GATSBY_SERVERLESS_BASE}/placeOrder`,
@@ -47,17 +43,17 @@ export default function usePizza({ pizzas, values }) {
         },
         body: JSON.stringify(body),
       }
-    );
-    const text = JSON.parse(await res.text());
+    )
+    const text = JSON.parse(await res.text())
 
     // check if everything worked
     if (res.status >= 400 && res.status < 600) {
-      setLoading(false); 
-      setError(text.message);
+      setLoading(false)
+      setError(text.message)
     } else {
       // it worked!
-      setLoading(false);
-      setMessage('Success! Come on down for your pizza');
+      setLoading(false)
+      setMessage('Success! Come on down for your pizza')
     }
   }
 
@@ -69,5 +65,5 @@ export default function usePizza({ pizzas, values }) {
     loading,
     message,
     submitOrder,
-  };
+  }
 }

@@ -4,12 +4,11 @@ import Img from 'gatsby-image'
 import SEO from '../components/SEO'
 
 const SinglePersonPage = ({ data: { person } }) => {
-  console.log(person)
   return (
     <>
       <SEO title={person.name} image={person.image.asset.fluid.src} />
       <div className="center">
-        <Img fluid={person.image.asset.fluid} alt={person.name}/>
+        <Img fluid={person.image.asset.fluid} alt={person.name} />
         <h2>
           <span className="mark">{person.name}</span>
         </h2>

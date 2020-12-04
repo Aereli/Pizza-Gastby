@@ -1,5 +1,4 @@
-exports.handler = async ( event, context ) => {
-  console.log(event)
+exports.handler = async (event, context) => {
   return {
     statusCode: 200,
     body: 'Hello!',
